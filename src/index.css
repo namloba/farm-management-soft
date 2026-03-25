@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@theme {
+  --font-headline: "Manrope", sans-serif;
+  --font-body: "Public Sans", sans-serif;
+  --font-label: "Public Sans", sans-serif;
+
+  --color-primary: #006e1c;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #4caf50;
+  --color-on-primary-container: #003c0b;
+  --color-primary-fixed: #94f990;
+  --color-on-primary-fixed: #002204;
+  
+  --color-secondary: #5d5f5f;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #dfe0e0;
+  --color-on-secondary-container: #616363;
+
+  --color-tertiary: #a63360;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #f26f9d;
+  --color-on-tertiary-container: #690034;
+
+  --color-surface: #f6faf5;
+  --color-on-surface: #181d1a;
+  --color-surface-variant: #dfe4df;
+  --color-on-surface-variant: #3f4a3c;
+  --color-outline: #6f7a6b;
+  --color-outline-variant: #becab9;
+
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f1f5f0;
+  --color-surface-container: #ebefea;
+  --color-surface-container-high: #e5e9e4;
+  --color-surface-container-highest: #dfe4df;
+}
+
+@layer base {
+  body {
+    @apply bg-surface font-body text-on-surface;
+  }
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.fill-icon {
+  font-variation-settings: 'FILL' 1;
+}
+
+.bio-membrane {
+  background: rgba(235, 239, 234, 0.7);
+  backdrop-filter: blur(12px);
+}
+
+.hero-gradient {
+  background: linear-gradient(135deg, #006e1c 0%, #4caf50 100%);
+}
+
+.bg-organic-mesh {
+  background-color: #f6faf5;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(76, 175, 80, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(148, 249, 144, 0.15) 0px, transparent 50%);
+}
+
+.timeline-line {
+  width: 2px;
+  background: #dfe4df;
+  position: absolute;
+  left: 23px;
+  top: 0;
+  bottom: 0;
+  z-index: 0;
+}
