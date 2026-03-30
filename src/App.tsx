@@ -6,6 +6,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ImageUploader } from './components/ImageUploader';
+import { WeatherWidget } from './components/WetherWidget';
 
 type Screen = 'login' | 'register' | 'dashboard' | 'areas' | 'logs' | 'profile' | 'addJournal';
 
@@ -347,17 +348,10 @@ function DashboardScreen({ onAddJournal }: { onAddJournal: () => void }) {
             Nông trại của bạn đang <span className="text-primary">phát triển tốt</span>.
           </h2>
         </div>
-        <div className="md:col-span-4 bg-primary-container rounded-3xl p-6 text-white shadow-sm">
-          <div className="flex items-baseline gap-1">
-            <span className="text-4xl font-headline font-extrabold">28°</span>
-            <span className="font-medium opacity-80 text-sm">C</span>
-          </div>
-          <p className="font-semibold text-sm">Có mây rải rác</p>
-          <div className="flex gap-3 mt-2 text-[10px] font-bold uppercase opacity-90">
-            <span className="flex items-center gap-1"><span className="material-symbols-outlined text-xs">water_drop</span> 64%</span>
-            <span className="flex items-center gap-1"><span className="material-symbols-outlined text-xs">air</span> 12km/h</span>
-          </div>
+        <div className="md:col-span-4">
+          <WeatherWidget unit="celsius" />
         </div>
+  
       </section>
 
       {/* Alert Card */}

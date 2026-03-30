@@ -66,4 +66,4 @@ export function CameraUpload({ onImageCapture, onClose }: CameraUploadProps) {
       </div>
     </motion.div>
   );
-} s
+}
