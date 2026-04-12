@@ -13,6 +13,8 @@ app.use(express.urlencoded({ extended: true }));
 const zoneRoutes = require('./src/routes/zoneRoutes');
 const farmRoutes = require('./src/routes/farmRoutes');
 const journalRoutes = require('./src/routes/journalRoutes');
+const materialRoutes = require('./src/routes/materialRoutes');
+
 
 
 // Routes
@@ -20,6 +22,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/zones', zoneRoutes);
 app.use('/api/farms', farmRoutes);
 app.use('/api/journals', journalRoutes);
+app.use('/api/materials', materialRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

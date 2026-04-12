@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CameraUpload } from './CameraUpload';
 
@@ -8,45 +8,58 @@ interface ImageUploaderProps {
   maxImages?: number;
 }
 
-export function ImageUploader({ onImagesUploaded, existingImages = [], maxImages = 5 }: ImageUploaderProps) {
+const ImageUploader = ({ onImagesUploaded, existingImages = [], maxImages = 5 }: ImageUploaderProps) => {
   const [images, setImages] = useState<string[]>(existingImages);
   const [showCamera, setShowCamera] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || []);
+  // ✅ Dùng useCallback để tránh tạo hàm mới mỗi lần render
+  const updateImages = useCallback((newImages: string[]) => {
+    setImages(newImages);
+    onImagesUploaded(newImages);
+  }, [onImagesUploaded]);
+
+  const handleFileSelect = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputFiles = event.target.files;
+    const files: File[] = inputFiles ? Array.from(inputFiles) : [];
     const remainingSlots = maxImages - images.length;
     const filesToProcess = files.slice(0, remainingSlots);
 
-    filesToProcess.forEach(file => {
+    filesToProcess.forEach((file) => {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImages(prev => {
-          const newImages = [...prev, reader.result as string];
-          onImagesUploaded(newImages);
-          return newImages;
-        });
+        const result = reader.result;
+        if (typeof result === 'string') {
+          const newImages = [...images, result];
+          updateImages(newImages);
+        }
       };
-        reader.readAsDataURL(file);
+      reader.readAsDataURL(file);
     });
-  };
+  }, [images, maxImages, updateImages]);
 
-  const handleCameraCapture = (imageData: string) => {
-    setImages(prev => {
-      const newImages = [...prev, imageData];
-      onImagesUploaded(newImages);
-      return newImages;
-    });
+  const handleCameraCapture = useCallback((imageData: string) => {
+    const newImages = [...images, imageData];
+    updateImages(newImages);
     setShowCamera(false);
-  };
+  }, [images, updateImages]);
 
-  const removeImage = (index: number) => {
-    setImages(prev => {
-      const newImages = prev.filter((_, i) => i !== index);
-      onImagesUploaded(newImages);
-      return newImages;
-    });
-  };
+  const removeImage = useCallback((index: number) => {
+    const newImages = images.filter((_, i) => i !== index);
+    updateImages(newImages);
+  }, [images, updateImages]);
+
+  const openFilePicker = useCallback(() => {
+    fileInputRef.current?.click();
+  }, []);
+
+  const openCamera = useCallback(() => {
+    setShowCamera(true);
+  }, []);
+
+  const closeCamera = useCallback(() => {
+    setShowCamera(false);
+  }, []);
 
   return (
     <div className="space-y-4">
@@ -70,7 +83,7 @@ export function ImageUploader({ onImagesUploaded, existingImages = [], maxImages
         {images.length < maxImages && (
           <div className="flex gap-3">
             <button
-              onClick={() => fileInputRef.current?.click()}
+              onClick={openFilePicker}
               className="w-20 h-20 border-2 border-dashed border-outline-variant rounded-lg flex flex-col items-center justify-center gap-1 hover:border-primary hover:bg-primary/5 transition-colors"
             >
               <span className="material-symbols-outlined text-primary">photo_library</span>
@@ -78,7 +91,7 @@ export function ImageUploader({ onImagesUploaded, existingImages = [], maxImages
             </button>
             
             <button
-              onClick={() => setShowCamera(true)}
+              onClick={openCamera}
               className="w-20 h-20 border-2 border-dashed border-outline-variant rounded-lg flex flex-col items-center justify-center gap-1 hover:border-primary hover:bg-primary/5 transition-colors"
             >
               <span className="material-symbols-outlined text-primary">camera_alt</span>
@@ -101,10 +114,11 @@ export function ImageUploader({ onImagesUploaded, existingImages = [], maxImages
         {showCamera && (
           <CameraUpload
             onImageCapture={handleCameraCapture}
-            onClose={() => setShowCamera(false)}
+            onClose={closeCamera}
           />
         )}
       </AnimatePresence>
     </div>
   );
 }
+export default ImageUploader;

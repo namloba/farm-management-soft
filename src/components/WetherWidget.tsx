@@ -43,7 +43,7 @@ const getWeatherDescription = (code: number): { main: string; icon: string } => 
   return weatherMap[code] || { main: 'Đang cập nhật', icon: '🌡️' };
 };
 
-export function WeatherWidget({ unit = 'celsius' }: WeatherWidgetProps) {
+const WeatherWidget = ({ unit = 'celsius' }: WeatherWidgetProps) => {
   console.log('WeatherWidget đã được gọi');
   const { location, error: locationError, loading: locationLoading } = useGeolocation();
   const [weather, setWeather] = useState<WeatherData | null>(null);
@@ -171,3 +171,4 @@ export function WeatherWidget({ unit = 'celsius' }: WeatherWidgetProps) {
     </div>
   );
 }
+export default WeatherWidget;

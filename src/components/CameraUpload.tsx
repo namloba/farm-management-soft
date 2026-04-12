@@ -14,6 +14,7 @@ export function CameraUpload({ onImageCapture, onClose }: CameraUploadProps) {
   const capture = useCallback(() => {
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
+      // ✅ Gọi callback trong event handler capture
       onImageCapture(imageSrc);
       onClose();
     }
@@ -35,6 +36,16 @@ export function CameraUpload({ onImageCapture, onClose }: CameraUploadProps) {
           audio={false}
           ref={webcamRef}
           screenshotFormat="image/jpeg"
+          screenshotQuality={1}
+          // ensure required behavior flags are provided to satisfy WebcamProps
+          disablePictureInPicture={true}
+          forceScreenshotSourceSize={false}
+          imageSmoothing={true}
+          // mirror preview when using front camera
+          mirrored={facingMode === 'user'}
+          // provide minimal screenshot constraints to satisfy strict prop types
+          minScreenshotWidth={0}
+          minScreenshotHeight={0}
           videoConstraints={{
             facingMode: facingMode,
           }}
